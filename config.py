@@ -24,6 +24,11 @@ GEMMA_ROOT = os.path.join(MODELS_ROOT, "gemma-3-12b-it-qat-q4_0-unquantized")
 # IC-LoRA path (pose-only)
 IC_LORA_POSE_PATH = os.path.join(MODELS_ROOT, "ltx-2-19b-ic-lora-pose-control.safetensors")
 
+# DWPose ONNX model paths
+DWPOSE_DIR = os.getenv("DWPOSE_DIR", os.path.join(MODELS_ROOT, "dwpose"))
+DWPOSE_DET_MODEL = os.path.join(DWPOSE_DIR, "yolox_l.onnx")
+DWPOSE_POSE_MODEL = os.path.join(DWPOSE_DIR, "dw-ll_ucoco_384.onnx")
+
 # ============================================================================
 # Generation Defaults
 # ============================================================================
@@ -72,10 +77,9 @@ class GenerationConfig:
 @dataclass
 class PreprocessingConfig:
     """DWPose preprocessing settings for skeleton extraction."""
-    # DWPose ONNX model files
-    # These are auto-downloaded by controlnet-dwpose if not present
-    dwpose_det_model: str = "yolox_l.onnx"
-    dwpose_pose_model: str = "dw-ll_ucoco_384.onnx"
+    # DWPose ONNX model paths (absolute)
+    dwpose_det_model: str = DWPOSE_DET_MODEL
+    dwpose_pose_model: str = DWPOSE_POSE_MODEL
 
     # Device for DWPose inference
     dwpose_device: str = "cuda"

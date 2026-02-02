@@ -35,8 +35,12 @@ services:
     # Volumes
     volumes:
       # Model weights - adjust path to your local models directory
-      - ${MODELS_PATH:-./models}:/models:ro
-      
+      - ${MODELS_PATH}/checkpoints/ltx-2-19b-distilled-fp8.safetensors:/models/ltx-2-19b-distilled.safetensors:ro
+      - ${MODELS_PATH}/upscalers/ltx-2-spatial-upscaler-x2-1.0.safetensors:/models/ltx-2-spatial-upscaler-x2-1.0.safetensors:ro
+      - ${MODELS_PATH}/text_encoders/gemma-3-12b-it-qat-q4_0-unquantized:/models/gemma-3-12b-it-qat-q4_0-unquantized:ro
+      - ${MODELS_PATH}/loras/ltx-2-19b-ic-lora-pose-control.safetensors:/models/ltx-2-19b-ic-lora-pose-control.safetensors:ro
+      - ${MODELS_PATH}/dwpose:/models/dwpose:ro
+
       # Outputs - generated videos
       - ./outputs:/app/outputs
       

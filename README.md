@@ -136,7 +136,7 @@ python preprocessing.py input_video.mp4 output_skeleton.mp4
 |----------|---------|-------------|
 | `MODELS_ROOT` | `/models` | 모델 가중치 디렉토리 |
 | `OUTPUTS_DIR` | `/app/outputs` | 생성 영상 저장 경로 |
-| `GRADIO_SERVER_PORT` | `7860` | Gradio 서버 포트 |
+| `GRADIO_SERVER_PORT` | `7862` | Gradio 서버 포트 |
 | `GRADIO_SHARE` | `false` | 외부 공유 링크 활성화 |
 
 ### Generation Parameters

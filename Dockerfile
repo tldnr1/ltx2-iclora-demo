@@ -14,7 +14,7 @@ ENV PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 # Gradio settings
 ENV GRADIO_SERVER_NAME=0.0.0.0
-ENV GRADIO_SERVER_PORT=7860
+ENV GRADIO_SERVER_PORT=7862
 
 # =============================================================================
 # System Dependencies
@@ -45,10 +45,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Install LTX-2 packages from GitHub
-# Using specific commit/tag for reproducibility
-RUN pip install --no-cache-dir --no-build-isolation \
-    'git+https://github.com/Lightricks/LTX-2.git#subdirectory=packages/ltx-core' && \
-    pip install --no-cache-dir --no-build-isolation \
+# Using specific commit/tag for reproducibility# LTX-2 패키지 설치 (격리 옵션 제거)
+RUN pip install --no-cache-dir \
+    'git+https://github.com/Lightricks/LTX-2.git#subdirectory=packages/ltx-core' \
     'git+https://github.com/Lightricks/LTX-2.git#subdirectory=packages/ltx-pipelines'
 
 # Optional: Install xformers for attention optimization
@@ -74,6 +73,6 @@ VOLUME ["/models"]
 # Entrypoint
 # =============================================================================
 
-EXPOSE 7860
+EXPOSE 7862
 
 CMD ["python", "app.py"]

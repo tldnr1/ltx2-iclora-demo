@@ -1,0 +1,88 @@
+# =============================================================================
+# LTX-2 IC-LoRA Demo - Docker Compose
+# =============================================================================
+
+services:
+  ltx2-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    image: ltx2-iclora-demo:latest
+    container_name: ltx2-iclora-demo
+    
+    # GPU Support
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+    
+    # Environment
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      - MODELS_ROOT=/models
+      - OUTPUTS_DIR=/app/outputs
+      - UPLOADS_DIR=/app/uploads
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7862
+      # Uncomment for public sharing
+      # - GRADIO_SHARE=true
+    
+    # Volumes
+    volumes:
+      # Model weights - adjust path to your local models directory
+      - ${MODELS_PATH:-./models}:/models:ro
+      
+      # Outputs - generated videos
+      - ./outputs:/app/outputs
+      
+      # Uploads - temporary storage for uploaded files
+      - ./uploads:/app/uploads
+    
+    # Ports
+    ports:
+      - "7862:7862"
+    
+    # Shared memory for PyTorch DataLoader
+    shm_size: '16gb'
+    
+    # Keep container running
+    stdin_open: true
+    tty: true
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7862/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+# =============================================================================
+# Usage:
+# =============================================================================
+#
+# 1. Set MODELS_PATH environment variable to your models directory:
+#    export MODELS_PATH=/path/to/your/models
+#
+# 2. Build and run:
+#    docker compose up --build
+#
+# 3. Access the UI at http://localhost:7862
+#
+# =============================================================================
+# Required Model Files in MODELS_PATH:
+# =============================================================================
+#
+# /models/
+# ├── ltx-2-19b-distilled.safetensors
+# ├── ltx-2-spatial-upscaler-x2-1.0.safetensors
+# ├── gemma-3-12b-it-qat-q4_0-unquantized/
+# │   └── model-*.safetensors
+# └── ltx-2-19b-ic-lora-pose-control.safetensors
+#
+# =============================================================================

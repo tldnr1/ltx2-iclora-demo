@@ -1,0 +1,38 @@
+현재 상태: Pose-only control (DWPose)
+========================================
+
+Architecture
+- LTX-2 ICLoraPipeline (two-stage: stage1 generation + stage2 upscale)
+- DWPose (controlnet-dwpose, ONNX) 로 skeleton 추출
+- Gradio UI
+
+Flow
+- Input: 원본 영상 + (선택) 이미지
+- Process:
+    1. 원본 영상 로드 → resize → pad/trim (num_frames 맞춤)
+    2. DWPose로 skeleton 영상 추출 (body 18 + hands 42 + face 68 keypoints)
+    3. skeleton 영상을 video_conditioning으로 ICLoraPipeline에 전달
+    4. Pipeline이 two-stage로 영상 생성
+- Output: prompt + pose에 맞는 새 영상
+
+ICLoraPipeline API
+- video_conditioning: list[tuple[str, float]]  → (영상경로, strength)
+- images: list[tuple[str, int, float]]  → (이미지경로, frame_index, strength)
+- negative_prompt, num_inference_steps, cfg_guidance_scale 파라미터 없음 (내부 처리)
+- IC-LoRA strength 공식 권장값: 1.0
+
+DWPose vs OpenPose
+- DWPose: whole-body (body+hands+face), ONNX 기반, 더 정확
+- OpenPose: body-only (18 keypoints), 속도 느림, 정확도 낮음
+
+---
+
+향후 고려사항
+- Canny/Depth control 추가 시: 별도 LoRA 로드 필요 (현재 pose LoRA만 지원)
+- Multi-control blending: pose vs canny+depth 충돌 가능성
+    - pose가 강하면 depth(배경)가 무시됨
+    - depth가 강하면 pose 반영이 약해짐
+    - blending 과정에서 디테일 훼손 가능
+- 원본 영상 첫 프레임과 입력 이미지 alignment
+    - 현재는 사용자가 직접 맞춰야 함
+    - 자동 합성 기능 검토 필요

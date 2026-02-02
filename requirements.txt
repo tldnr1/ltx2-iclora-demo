@@ -1,0 +1,33 @@
+# =============================================================================
+# LTX-2 IC-LoRA Pose Control Demo - Requirements
+# =============================================================================
+
+# Core ML
+torch>=2.7.0
+safetensors>=0.4.0
+
+# LTX-2 packages (install from monorepo):
+# pip install git+https://github.com/Lightricks/LTX-2.git#subdirectory=packages/ltx-core
+# pip install git+https://github.com/Lightricks/LTX-2.git#subdirectory=packages/ltx-pipelines
+
+# Memory optimization
+accelerate>=0.25.0
+
+# UI
+gradio>=4.0.0
+
+# Preprocessing
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# DWPose (skeleton extraction via ONNX)
+controlnet-dwpose>=0.1.0
+
+# Video processing
+imageio>=2.31.0
+imageio-ffmpeg>=0.4.8
+
+# Utilities
+tqdm>=4.66.0
+einops>=0.7.0

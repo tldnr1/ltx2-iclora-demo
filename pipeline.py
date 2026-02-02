@@ -221,21 +221,21 @@ class LTX2PosePipeline:
                 tiling_config=self._tiling_config,
             )
 
-        if progress_callback:
-            progress_callback(90, 100, "Encoding video...")
+            if progress_callback:
+                progress_callback(90, 100, "Encoding video...")
 
-        # Save output
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = os.path.join(OUTPUTS_DIR, f"generated_{timestamp}.mp4")
+            # Save output
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_path = os.path.join(OUTPUTS_DIR, f"generated_{timestamp}.mp4")
 
-        encode_video(
-            video=video,
-            fps=config.frame_rate,
-            audio=audio,
-            audio_sample_rate=AUDIO_SAMPLE_RATE,
-            output_path=output_path,
-            video_chunks_number=video_chunks_number,
-        )
+            encode_video(
+                video=video,
+                fps=config.frame_rate,
+                audio=audio,
+                audio_sample_rate=AUDIO_SAMPLE_RATE,
+                output_path=output_path,
+                video_chunks_number=video_chunks_number,
+            )
 
         if progress_callback:
             progress_callback(100, 100, "Done!")

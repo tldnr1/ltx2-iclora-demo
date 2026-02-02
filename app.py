@@ -97,13 +97,14 @@ def generate_video(
         progress(0.1, desc="Generating video...")
 
         # Generate
-        output_path, control_preview = pipeline.generate(
-            prompt=prompt,
-            video_path=video_file,
-            image_path=image_file,
-            config=config,
-            progress_callback=on_progress,
-        )
+        with torch.no_grad():
+            output_path, control_preview = pipeline.generate(
+                prompt=prompt,
+                video_path=video_file,
+                image_path=image_file,
+                config=config,
+                progress_callback=on_progress,
+            )
 
         progress(1.0, desc="Complete!")
 
